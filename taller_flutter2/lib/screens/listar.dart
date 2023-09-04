@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:taller_flutter2/services/api_service.dart';
+import 'package:taller_flutter2/witgets/modalAgregar.dart';
+
+import '../witgets/cartas.dart';
 
 class UniversalApi extends StatefulWidget {
   const UniversalApi({super.key});
@@ -7,6 +10,7 @@ class UniversalApi extends StatefulWidget {
   @override
   State<UniversalApi> createState() => _UniversalApiState();
 }
+
 class _UniversalApiState extends State<UniversalApi> {
   late Future<List<Map<String, dynamic>>> futureData;
 
@@ -24,9 +28,7 @@ class _UniversalApiState extends State<UniversalApi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Visitantes')
-      ),
+      appBar: AppBar(title: const Text('Visitantes')),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: futureData,
         builder: (context, snapshot) {
@@ -39,47 +41,23 @@ class _UniversalApiState extends State<UniversalApi> {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            final List<Map<String, dynamic>> visitantes = snapshot.data as List<Map<String, dynamic>>;
-            return _construirListaDeCartas(visitantes);
+            final List<Map<String, dynamic>> visitantes =
+                snapshot.data as List<Map<String, dynamic>>;
+            return ConstruirListaDeCartas(visitantes: visitantes);
           }
         },
       ),
-
-    );
-  }
-  Widget _construirListaDeCartas(List<Map<String, dynamic>> visitantes) {
-  return ListView.builder(
-  itemCount: visitantes.length,
-  itemBuilder: (context, index) {
-    final visitante = visitantes[index]; // Suponiendo que visitantes es la lista de registros de la API
-
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      child: ListTile(
-        title: Text('${visitante['nombre_visitante']} ${visitante['apellido_visitante']}'),
-        subtitle: Text('Tipo de Visitante: ${visitante['tipo_visitante']}'),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () {
-                // Abrir el modal de edición con los datos de visitante
-                
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                // Eliminar el registro
-                
-              },
-            ),
-          ],
-        ),
-      ),
+      floatingActionButton: FloatingActionButton(
+  onPressed: () {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ModalAgregar();
+      },
     );
   },
-);
+  child: const Icon(Icons.add),
+),
+    );
   }
 }
