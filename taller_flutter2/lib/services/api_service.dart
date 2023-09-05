@@ -20,12 +20,28 @@ class ApiVisitantes {
     final response = await http.post(
       Uri.parse(baseUrl),
       headers: {
-        'ContentType': 'application/json', // Aquí está corregido
+        'Content-Type': 'application/json',
       },
       body: jsonEncode(nuevoRegistro),
     );
     print(nuevoRegistro);
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
+    } else {
+      print('Error: ${response.statusCode}');
+      print('Mensaje de error: ${response.body}');
+      throw Exception('Failed to add new visitor');
+    }
+  }
+  Future<void> actualizarRegistro(Map<String, dynamic> actualizacion) async {
+    final response = await http.put(
+      Uri.parse(baseUrl),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(actualizacion),
+    );
+    print(actualizacion);
+    if (response.statusCode == 200) {
     } else {
       print('Error: ${response.statusCode}');
       print('Mensaje de error: ${response.body}');

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taller_flutter2/witgets/modalActualizar.dart';
 
 class ConstruirListaDeCartas extends StatelessWidget {
   const ConstruirListaDeCartas({
@@ -29,13 +30,18 @@ class ConstruirListaDeCartas extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.edit),
                   onPressed: () {
-                    // Abrir el modal de edición con los datos de visitante
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ModalEditar(visitante: visitante,);
+                      },
+                    );
                   },
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: () {
-                    // Eliminar el registro
+                    
                   },
                 ),
               ],

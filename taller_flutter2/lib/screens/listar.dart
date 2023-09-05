@@ -6,6 +6,7 @@ import '../witgets/cartas.dart';
 
 class UniversalApi extends StatefulWidget {
   const UniversalApi({super.key});
+  
 
   @override
   State<UniversalApi> createState() => _UniversalApiState();
@@ -13,6 +14,7 @@ class UniversalApi extends StatefulWidget {
 
 class _UniversalApiState extends State<UniversalApi> {
   late Future<List<Map<String, dynamic>>> futureData;
+  
 
   @override
   void initState() {
@@ -21,9 +23,13 @@ class _UniversalApiState extends State<UniversalApi> {
   }
 
   Future<List<Map<String, dynamic>>> _cargarDatos() async {
+    setState(() {
+      
+    });
     final datos = await ApiVisitantes().fetchData("");
     return List<Map<String, dynamic>>.from(datos['visitantes']);
   }
+  
 
   @override
   Widget build(BuildContext context) {

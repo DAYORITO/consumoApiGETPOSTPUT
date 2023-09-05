@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../services/api_service.dart';
 
-class ModalAgregar extends StatefulWidget {
-  ModalAgregar({
-    super.key
+class ModalEditar extends StatefulWidget {
+  ModalEditar({
+    super.key,
+    required this.visitante
   });
+  final Map<String, dynamic> visitante;
 
   @override
-  State<ModalAgregar> createState() => _ModalAgregarState();
+  State<ModalEditar> createState() => _ModalEditarState();
 }
 
-class _ModalAgregarState extends State<ModalAgregar> {
+class _ModalEditarState extends State<ModalEditar> {
   final registro = ApiVisitantes();
 
   final TextEditingController nombre = TextEditingController();
@@ -35,7 +37,18 @@ class _ModalAgregarState extends State<ModalAgregar> {
   String selectedPermiso = 'PERMITIDO';
 
   @override
+  void initState(){
+    super.initState();
+    _updateFields();
+  }
+
+  _updateFields(){
+    nombre.text = widget.visitante['nombre_visitante'];
+  }
+
+  @override
   Widget build(BuildContext context) {
+    
     return AlertDialog(
       title: const Text('Editar visitante'),
       content: SingleChildScrollView(
@@ -58,47 +71,16 @@ class _ModalAgregarState extends State<ModalAgregar> {
                   const InputDecoration(labelText: 'Número de documento'),
               controller: numeroDocumento,
             ),
-            DropdownButtonFormField<String>(
-              value: selectedGenero,
-              items: opcionesGenero.map((String genero) {
-                return DropdownMenuItem<String>(
-                  value: genero,
-                  child: Text(genero),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    selectedGenero = newValue;
-                  });
-                }
-              },
-              decoration: const InputDecoration(
-                labelText: 'Género',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            DropdownButtonFormField<String>(
-              value: selectedPermiso,
-              items: opcionesPermiso.map((String permiso) {
-                return DropdownMenuItem<String>(
-                  value: permiso,
-                  child: Text(permiso),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    selectedPermiso = newValue;
-                  });
-                }
-              },
-              decoration: const InputDecoration(
-                labelText: 'Permiso',
-                border: OutlineInputBorder(),
-              ),
-            ),
-
+            _buildDropdown("Permiso", selectedPermiso, opcionesPermiso, (String? newValue) {
+              if (newValue != null) {
+                selectedPermiso = newValue;
+              }
+            }),
+            _buildDropdown("Género", selectedGenero, opcionesGenero, (String? newValue) {
+              if (newValue != null) {
+                selectedGenero = newValue;
+              }
+            }),
           ],
         ),
       ),
@@ -125,11 +107,8 @@ class _ModalAgregarState extends State<ModalAgregar> {
             };
             
             try {
-              await registro.agregarRegistro(nuevoVisitante);
+              await registro.actualizarRegistro(nuevoVisitante);
               Navigator.of(context).pop();
-              setState(() {
-                
-              });
               
                 
               
@@ -145,4 +124,21 @@ class _ModalAgregarState extends State<ModalAgregar> {
     );
   }
 }
-
+Widget _buildDropdown(String title, String selectedValue, List<String> items, ValueChanged<String?> onChanged) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      DropdownButton<String>(
+        value: selectedValue,
+        items: items.map((String item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Text(item),
+          );
+        }).toList(),
+        onChanged: onChanged,
+      ),
+    ],
+  );
+}
