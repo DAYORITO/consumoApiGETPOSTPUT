@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 
 class ModalEditar extends StatefulWidget {
-  ModalEditar({
+  const ModalEditar({
     super.key,
-    required this.visitante
+    required this.visitante,
+    required this.actualizarDatos,
   });
   final Map<String, dynamic> visitante;
+  final Function actualizarDatos;
 
   @override
   State<ModalEditar> createState() => _ModalEditarState();
+
 }
 
 class _ModalEditarState extends State<ModalEditar> {
@@ -36,14 +39,22 @@ class _ModalEditarState extends State<ModalEditar> {
 
   String selectedPermiso = 'PERMITIDO';
 
+
   @override
   void initState(){
     super.initState();
     _updateFields();
+
   }
 
   _updateFields(){
     nombre.text = widget.visitante['nombre_visitante'];
+    apellido.text = widget.visitante['apellido_visitante'];
+    selectedGenero = widget.visitante['genero_visitante'];
+    selectedPermiso = widget.visitante['permiso'];
+    tipoDocumento.text = widget.visitante['tipo_documento_visitante'];
+    numeroDocumento.text = widget.visitante['numero_documento_visitante'];
+
   }
 
   @override
@@ -71,16 +82,47 @@ class _ModalEditarState extends State<ModalEditar> {
                   const InputDecoration(labelText: 'Número de documento'),
               controller: numeroDocumento,
             ),
-            _buildDropdown("Permiso", selectedPermiso, opcionesPermiso, (String? newValue) {
-              if (newValue != null) {
-                selectedPermiso = newValue;
-              }
-            }),
-            _buildDropdown("Género", selectedGenero, opcionesGenero, (String? newValue) {
-              if (newValue != null) {
-                selectedGenero = newValue;
-              }
-            }),
+            DropdownButtonFormField<String>(
+              value: selectedGenero,
+              items: opcionesGenero.map((String genero) {
+                return DropdownMenuItem<String>(
+                  value: genero,
+                  child: Text(genero),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    selectedGenero = newValue;
+                  });
+                }
+              },
+              decoration: const InputDecoration(
+                labelText: 'Género',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            DropdownButtonFormField<String>(
+              value: selectedPermiso,
+              items: opcionesPermiso.map((String permiso) {
+                return DropdownMenuItem<String>(
+                  value: permiso,
+                  child: Text(permiso),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    selectedPermiso = newValue;
+                  });
+                }
+              },
+              decoration: const InputDecoration(
+                labelText: 'Permiso',
+                border: OutlineInputBorder(),
+              ),
+            ),
+
           ],
         ),
       ),
@@ -95,13 +137,12 @@ class _ModalEditarState extends State<ModalEditar> {
           child: const Text('Guardar'),
           onPressed: () async {
             final Map<String, dynamic> nuevoVisitante = {
+              "_id": widget.visitante['_id'],
               "tipo_documento_visitante": tipoDocumento.text,
               "numero_documento_visitante": numeroDocumento.text,
               "nombre_visitante": nombre.text,
               "apellido_visitante": apellido.text,
               "genero_visitante": selectedGenero,
-              "tipo_visitante": "FRECUENTE",
-              "anfitrion": "null",
               "permiso": selectedPermiso,
 
             };
@@ -109,36 +150,18 @@ class _ModalEditarState extends State<ModalEditar> {
             try {
               await registro.actualizarRegistro(nuevoVisitante);
               Navigator.of(context).pop();
-              
-                
-              
-               // Cierra el modal después de que la solicitud POST se complete con éxito
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Se actualizó el registro correctamente'),
+                ),
+              );
+              widget.actualizarDatos();
             } catch (e) {
-              // Manejo de errores, muestra un mensaje de error si es necesario
               print('Error al agregar visitante: $e');
-              // Puedes mostrar un mensaje de error al usuario aquí si lo deseas
             }
           },
         ),
       ],
     );
   }
-}
-Widget _buildDropdown(String title, String selectedValue, List<String> items, ValueChanged<String?> onChanged) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-      DropdownButton<String>(
-        value: selectedValue,
-        items: items.map((String item) {
-          return DropdownMenuItem<String>(
-            value: item,
-            child: Text(item),
-          );
-        }).toList(),
-        onChanged: onChanged,
-      ),
-    ],
-  );
 }

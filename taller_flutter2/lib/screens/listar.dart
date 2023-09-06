@@ -6,7 +6,6 @@ import '../witgets/cartas.dart';
 
 class UniversalApi extends StatefulWidget {
   const UniversalApi({super.key});
-  
 
   @override
   State<UniversalApi> createState() => _UniversalApiState();
@@ -14,7 +13,6 @@ class UniversalApi extends StatefulWidget {
 
 class _UniversalApiState extends State<UniversalApi> {
   late Future<List<Map<String, dynamic>>> futureData;
-  
 
   @override
   void initState() {
@@ -23,13 +21,14 @@ class _UniversalApiState extends State<UniversalApi> {
   }
 
   Future<List<Map<String, dynamic>>> _cargarDatos() async {
-    setState(() {
-      
-    });
     final datos = await ApiVisitantes().fetchData("");
     return List<Map<String, dynamic>>.from(datos['visitantes']);
   }
-  
+  void actualizarDatos() {
+    setState(() {
+      futureData = _cargarDatos();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,21 +48,23 @@ class _UniversalApiState extends State<UniversalApi> {
           } else {
             final List<Map<String, dynamic>> visitantes =
                 snapshot.data as List<Map<String, dynamic>>;
-            return ConstruirListaDeCartas(visitantes: visitantes);
+            return ConstruirListaDeCartas(visitantes: visitantes, actualizarDatos: actualizarDatos);
           }
         },
       ),
       floatingActionButton: FloatingActionButton(
-  onPressed: () {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return ModalAgregar();
-      },
-    );
-  },
-  child: const Icon(Icons.add),
-),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ModalAgregar();
+            },
+          ).then((value) => setState(() {
+                futureData = _cargarDatos();
+              }));
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

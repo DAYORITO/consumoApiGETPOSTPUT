@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:taller_flutter2/screens/listar.dart';
 import 'package:taller_flutter2/witgets/modalActualizar.dart';
 
-class ConstruirListaDeCartas extends StatelessWidget {
+import '../services/api_service.dart';
+
+class ConstruirListaDeCartas extends StatefulWidget {
   const ConstruirListaDeCartas({
     super.key,
     required this.visitantes,
+    required this.actualizarDatos,
   });
 
   final List<Map<String, dynamic>> visitantes;
+  final Function actualizarDatos;
 
+  @override
+  State<ConstruirListaDeCartas> createState() => _ConstruirListaDeCartasState();
+}
+
+class _ConstruirListaDeCartasState extends State<ConstruirListaDeCartas> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: visitantes.length,
+      itemCount: widget.visitantes.length,
       itemBuilder: (context, index) {
-        final visitante = visitantes[
+        final visitante = widget.visitantes[
             index]; // Suponiendo que visitantes es la lista de registros de la API
 
         return Card(
@@ -33,7 +43,10 @@ class ConstruirListaDeCartas extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return ModalEditar(visitante: visitante,);
+                        return ModalEditar(
+                          visitante: visitante,
+                          actualizarDatos: widget.actualizarDatos,  
+                        );
                       },
                     );
                   },
@@ -41,7 +54,42 @@ class ConstruirListaDeCartas extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: () {
-                    
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Eliminar visitante'),
+                          content: const Text(
+                              '¿Está seguro que desea eliminar este visitante?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancelar'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                final registro = ApiVisitantes();
+                                Map<String, dynamic> eliminacion = {
+                                  '_id': visitante['_id']
+                                };
+                                await registro.eliminarRegistro(eliminacion);
+                                Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Se eliminó el registro correctamente'),
+                                  ),
+                                );
+                                widget.actualizarDatos();
+                              },
+                              child: const Text('Eliminar'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
               ],

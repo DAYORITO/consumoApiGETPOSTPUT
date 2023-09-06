@@ -32,6 +32,7 @@ class ApiVisitantes {
       throw Exception('Failed to add new visitor');
     }
   }
+
   Future<void> actualizarRegistro(Map<String, dynamic> actualizacion) async {
     final response = await http.put(
       Uri.parse(baseUrl),
@@ -40,12 +41,30 @@ class ApiVisitantes {
       },
       body: jsonEncode(actualizacion),
     );
-    print(actualizacion);
+
     if (response.statusCode == 200) {
+      print('Se actualizó el registro correctamente');
     } else {
       print('Error: ${response.statusCode}');
       print('Mensaje de error: ${response.body}');
-      throw Exception('Failed to add new visitor');
+      throw Exception('Failed to update visitor record');
+    }
+  }
+  Future<void> eliminarRegistro(Map<String, dynamic> eliminacion) async {
+    final response = await http.delete(
+      Uri.parse(baseUrl),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(eliminacion),
+    );
+
+    if (response.statusCode == 200) {
+      print('Se actualizó el registro correctamente');
+    } else {
+      print('Error: ${response.statusCode}');
+      print('Mensaje de error: ${response.body}');
+      throw Exception('Failed to update visitor record');
     }
   }
 }

@@ -127,6 +127,11 @@ class _ModalAgregarState extends State<ModalAgregar> {
             try {
               await registro.agregarRegistro(nuevoVisitante);
               Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Se agregó el registro correctamente'),
+                ),
+              );
               setState(() {
                 
               });
