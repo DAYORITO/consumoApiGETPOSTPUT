@@ -10,8 +10,7 @@ class ApiVisitantes {
       return jsonDecode(response.body);
     } else {
       // Manejo de errores más detallado
-      print('Error: ${response.statusCode}');
-      print('Mensaje de error: ${response.body}');
+     
       throw Exception('Failed to load data');
     }
   }
