@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taller_flutter2/screens/listar.dart';
+import 'package:taller_flutter2/screens/menu.dart';
 
 
 class Login extends StatefulWidget {
@@ -61,7 +62,7 @@ class _LoginState extends State<Login> {
             )   
           ),
           const SizedBox(height: 10,),
-          ElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const UniversalApi()));}, child: const Text("Ingresar"))
+          ElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const MenuScreen()));}, child: const Text("Ingresar"))
           ]
           )
         ),

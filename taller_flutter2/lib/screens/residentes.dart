@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:taller_flutter2/services/api_service.dart';
+import 'package:taller_flutter2/witgets/residentes/cartasResidentes.dart';
 import 'package:taller_flutter2/witgets/visitantes/modalAgregar.dart';
 
-import '../witgets/visitantes/cartas.dart';
-
-class UniversalApi extends StatefulWidget {
-  const UniversalApi({super.key});
+class InterfazResidentes extends StatefulWidget {
+  const InterfazResidentes({super.key});
 
   @override
-  State<UniversalApi> createState() => _UniversalApiState();
+  State<InterfazResidentes> createState() => _InterfazResidentesState();
 }
 
-class _UniversalApiState extends State<UniversalApi> {
+class _InterfazResidentesState extends State<InterfazResidentes> {
   late Future<List<Map<String, dynamic>>> futureData;
 
   @override
@@ -21,8 +20,8 @@ class _UniversalApiState extends State<UniversalApi> {
   }
 
   Future<List<Map<String, dynamic>>> _cargarDatos() async {
-    final datos = await ApiVisitantes().fetchData('visitantes/');
-    return List<Map<String, dynamic>>.from(datos['visitantes']);
+    final datos = await ApiVisitantes().fetchData('residentes/');
+    return List<Map<String, dynamic>>.from(datos['residentes']);
   }
   void actualizarDatos() {
     setState(() {
@@ -33,7 +32,7 @@ class _UniversalApiState extends State<UniversalApi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Visitantes')),
+      appBar: AppBar(title: const Text('Residentes')),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: futureData,
         builder: (context, snapshot) {
@@ -46,9 +45,9 @@ class _UniversalApiState extends State<UniversalApi> {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            final List<Map<String, dynamic>> visitantes =
+            final List<Map<String, dynamic>> residentes =
                 snapshot.data as List<Map<String, dynamic>>;
-            return ConstruirListaDeCartas(visitantes: visitantes, actualizarDatos: actualizarDatos);
+            return ConstruirListaDeCartasResi(informacion: residentes, actualizarDatos: actualizarDatos);
           }
         },
       ),
