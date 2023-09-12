@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 
-import '../services/api_service.dart';
+import '../../services/api_service.dart';
 
-class ModalAgregar extends StatefulWidget {
-  ModalAgregar({
-    super.key
+class ModalEditarResi extends StatefulWidget {
+  const ModalEditarResi({
+    super.key,
+    required this.residente,
+    required this.actualizarDatos,
   });
+  final Map<String, dynamic> residente;
+  final Function actualizarDatos;
 
   @override
-  State<ModalAgregar> createState() => _ModalAgregarState();
+  State<ModalEditarResi> createState() => _ModalEditarResiState();
+
 }
 
-class _ModalAgregarState extends State<ModalAgregar> {
+class _ModalEditarResiState extends State<ModalEditarResi> {
   final registro = ApiVisitantes();
 
   final TextEditingController nombre = TextEditingController();
@@ -34,10 +39,29 @@ class _ModalAgregarState extends State<ModalAgregar> {
 
   String selectedPermiso = 'PERMITIDO';
 
+
+  @override
+  void initState(){
+    super.initState();
+    _updateFields();
+
+  }
+
+  _updateFields(){
+    nombre.text = widget.residente['nombre_residente'];
+    apellido.text = widget.residente['apellido_residente'];
+    selectedGenero = widget.residente['genero_residente'];
+    selectedPermiso = widget.residente['permiso'];
+    tipoDocumento.text = widget.residente['tipo_documento_residente'];
+    numeroDocumento.text = widget.residente['numero_documento_residente'];
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    
     return AlertDialog(
-      title: const Text('Editar visitante'),
+      title: const Text('Editar residente'),
       content: SingleChildScrollView(
         child: Column(
           children: [
@@ -112,37 +136,28 @@ class _ModalAgregarState extends State<ModalAgregar> {
         TextButton(
           child: const Text('Guardar'),
           onPressed: () async {
-            final Map<String, dynamic> nuevoVisitante = {
-              "tipo_documento_visitante": tipoDocumento.text,
-              "numero_documento_visitante": numeroDocumento.text,
-              "nombre_visitante": nombre.text,
-              "apellido_visitante": apellido.text,
-              "genero_visitante": selectedGenero,
-              "tipo_visitante": "FRECUENTE",
-              "anfitrion": "null",
+            final Map<String, dynamic> nuevoresidente = {
+              "_id": widget.residente['_id'],
+              "tipo_documento_residente": tipoDocumento.text,
+              "numero_documento_residente": numeroDocumento.text,
+              "nombre_residente": nombre.text,
+              "apellido_residente": apellido.text,
+              "genero_residente": selectedGenero,
               "permiso": selectedPermiso,
 
             };
             
             try {
-              await registro.agregarRegistro(nuevoVisitante);
+              await registro.actualizarRegistro(nuevoresidente,'residentes/');
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Se agregó el registro correctamente'),
+                  content: Text('Se actualizó el registro correctamente'),
                 ),
               );
-              setState(() {
-                
-              });
-              
-                
-              
-               // Cierra el modal después de que la solicitud POST se complete con éxito
+              widget.actualizarDatos();
             } catch (e) {
-              // Manejo de errores, muestra un mensaje de error si es necesario
-              print('Error al agregar visitante: $e');
-              // Puedes mostrar un mensaje de error al usuario aquí si lo deseas
+              print('Error al agregar residente: $e');
             }
           },
         ),
@@ -150,4 +165,3 @@ class _ModalAgregarState extends State<ModalAgregar> {
     );
   }
 }
-

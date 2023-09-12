@@ -2,10 +2,11 @@ import 'package:http/http.dart' as http; // Asegúrate de tener esta línea
 import 'dart:convert';
 
 class ApiVisitantes {
-  final String baseUrl = 'https://apptower-bk.onrender.com/api/visitantes/';
+  final String baseUrl = 'https://apptower-bk.onrender.com/api/';
 
   Future<Map<String, dynamic>> fetchData(String endpoint) async {
-    final response = await http.get(Uri.parse('$baseUrl/$endpoint'));
+    final response = await http.get(Uri.parse('$baseUrl$endpoint'));
+    print('$baseUrl$endpoint');
     if (response.statusCode == 200) {
       
       return jsonDecode(response.body);
@@ -14,9 +15,9 @@ class ApiVisitantes {
     }
   }
 
-  Future<void> agregarRegistro(Map<String, dynamic> nuevoRegistro) async {
+  Future<void> agregarRegistro(Map<String, dynamic> nuevoRegistro, String endpoint) async {
     final response = await http.post(
-      Uri.parse(baseUrl),
+      Uri.parse(baseUrl+endpoint),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -31,9 +32,9 @@ class ApiVisitantes {
     }
   }
 
-  Future<void> actualizarRegistro(Map<String, dynamic> actualizacion) async {
+  Future<void> actualizarRegistro(Map<String, dynamic> actualizacion, String endpoint) async {
     final response = await http.put(
-      Uri.parse(baseUrl),
+      Uri.parse(baseUrl+endpoint),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -48,9 +49,9 @@ class ApiVisitantes {
       throw Exception('Failed to update visitor record');
     }
   }
-  Future<void> eliminarRegistro(Map<String, dynamic> eliminacion) async {
+  Future<void> eliminarRegistro(Map<String, dynamic> eliminacion, String endpoint) async {
     final response = await http.delete(
-      Uri.parse(baseUrl),
+      Uri.parse(baseUrl+endpoint),
       headers: {
         'Content-Type': 'application/json',
       },

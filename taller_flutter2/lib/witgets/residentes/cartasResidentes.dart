@@ -1,38 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:taller_flutter2/witgets/modalActualizar.dart';
+import '../../services/api_service.dart';
+import 'modalActualizarResi.dart';
 
-import '../services/api_service.dart';
-
-class ConstruirListaDeCartas extends StatefulWidget {
-  const ConstruirListaDeCartas({
+class ConstruirListaDeCartasResi extends StatefulWidget {
+  const ConstruirListaDeCartasResi({
     super.key,
-    required this.visitantes,
+    required this.informacion,
     required this.actualizarDatos,
   });
 
-  final List<Map<String, dynamic>> visitantes;
+  final List<Map<String, dynamic>> informacion;
   final Function actualizarDatos;
 
   @override
-  State<ConstruirListaDeCartas> createState() => _ConstruirListaDeCartasState();
+  State<ConstruirListaDeCartasResi> createState() => _ConstruirListaDeCartasResiState();
 }
 
-class _ConstruirListaDeCartasState extends State<ConstruirListaDeCartas> {
+class _ConstruirListaDeCartasResiState extends State<ConstruirListaDeCartasResi> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: widget.visitantes.length,
+      itemCount: widget.informacion.length,
       itemBuilder: (context, index) {
-        final visitante = widget.visitantes[
-            index]; // Suponiendo que visitantes es la lista de registros de la API
+        final residente = widget.informacion[index]; 
 
         return Card(
           margin: const EdgeInsets.all(8.0),
           child: ListTile(
             title: Text(
-                '${visitante['nombre_visitante']} ${visitante['apellido_visitante']}'),
+                '${residente['nombre_residente']} ${residente['apellido_residente']}'),
             subtitle: Text(
-                'Tipo de Visitante: ${visitante['tipo_visitante']}\nTipo de documento: ${visitante['tipo_documento_visitante']}\nNúmero de documento: ${visitante['numero_documento_visitante']}\nSexo: ${visitante['genero_visitante']}\nPermiso: ${visitante['permiso']}'),
+                'Tipo de residente: ${residente['tipo_residente']}\nTipo de documento: ${residente['tipo_documento_residente']}\nNúmero de documento: ${residente['numero_documento_residente']}\nSexo: ${residente['genero_residente']}'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -42,8 +40,8 @@ class _ConstruirListaDeCartasState extends State<ConstruirListaDeCartas> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return ModalEditar(
-                          visitante: visitante,
+                        return ModalEditarResi(
+                          residente: residente,
                           actualizarDatos: widget.actualizarDatos,  
                         );
                       },
@@ -57,9 +55,9 @@ class _ConstruirListaDeCartasState extends State<ConstruirListaDeCartas> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text('Eliminar visitante'),
+                          title: const Text('Eliminar residente'),
                           content: const Text(
-                              '¿Está seguro que desea eliminar este visitante?'),
+                              '¿Está seguro que desea eliminar este registro?'),
                           actions: [
                             TextButton(
                               onPressed: () {
@@ -71,9 +69,9 @@ class _ConstruirListaDeCartasState extends State<ConstruirListaDeCartas> {
                               onPressed: () async {
                                 final registro = ApiVisitantes();
                                 Map<String, dynamic> eliminacion = {
-                                  '_id': visitante['_id']
+                                  '_id': residente['_id']
                                 };
-                                await registro.eliminarRegistro(eliminacion);
+                                await registro.eliminarRegistro(eliminacion,'visitantes/');
                                 Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
