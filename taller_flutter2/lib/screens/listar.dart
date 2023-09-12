@@ -47,7 +47,7 @@ class _UniversalApiState extends State<UniversalApi> {
             );
           } else {
             final List<Map<String, dynamic>> visitantes =
-                snapshot.data as List<Map<String, dynamic>>;
+            snapshot.data as List<Map<String, dynamic>>;
             return ConstruirListaDeCartas(visitantes: visitantes, actualizarDatos: actualizarDatos);
           }
         },

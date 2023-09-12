@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:taller_flutter2/screens/listar.dart';
 import 'package:taller_flutter2/witgets/modalActualizar.dart';
 
 import '../services/api_service.dart';

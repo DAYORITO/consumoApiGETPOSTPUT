@@ -7,10 +7,9 @@ class ApiVisitantes {
   Future<Map<String, dynamic>> fetchData(String endpoint) async {
     final response = await http.get(Uri.parse('$baseUrl/$endpoint'));
     if (response.statusCode == 200) {
+      
       return jsonDecode(response.body);
     } else {
-      // Manejo de errores más detallado
-     
       throw Exception('Failed to load data');
     }
   }
