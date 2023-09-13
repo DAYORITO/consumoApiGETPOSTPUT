@@ -75,12 +75,16 @@ class _ModalEditarState extends State<ModalEditar> {
             ),
             TextField(
               decoration: const InputDecoration(labelText: 'Tipo de documento'),
+              enabled: false,
               controller: tipoDocumento,
             ),
             TextField(
               decoration:
                   const InputDecoration(labelText: 'Número de documento'),
               controller: numeroDocumento,
+            ),
+            const SizedBox(
+              height: 5,
             ),
             DropdownButtonFormField<String>(
               value: selectedGenero,
@@ -99,8 +103,11 @@ class _ModalEditarState extends State<ModalEditar> {
               },
               decoration: const InputDecoration(
                 labelText: 'Género',
-                border: OutlineInputBorder(),
+                border: UnderlineInputBorder(),
               ),
+            ),
+            const SizedBox(
+              height: 5,
             ),
             DropdownButtonFormField<String>(
               value: selectedPermiso,
@@ -119,7 +126,7 @@ class _ModalEditarState extends State<ModalEditar> {
               },
               decoration: const InputDecoration(
                 labelText: 'Permiso',
-                border: OutlineInputBorder(),
+                border: UnderlineInputBorder(),
               ),
             ),
 

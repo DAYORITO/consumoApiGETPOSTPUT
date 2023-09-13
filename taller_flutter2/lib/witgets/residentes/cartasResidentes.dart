@@ -30,7 +30,8 @@ class _ConstruirListaDeCartasResiState extends State<ConstruirListaDeCartasResi>
             title: Text(
                 '${residente['nombre_residente']} ${residente['apellido_residente']}'),
             subtitle: Text(
-                'Tipo de residente: ${residente['tipo_residente']}\nTipo de documento: ${residente['tipo_documento_residente']}\nNúmero de documento: ${residente['numero_documento_residente']}\nSexo: ${residente['genero_residente']}'),
+                'Tipo de residente: ${residente['tipo_residente']}\nTipo de documento: ${residente['tipo_documento_residente']}\nNúmero de documento: ${residente['numero_documento_residente']}\nSexo: ${residente['genero_residente']}'+
+                '\nCorreo: ${residente['correo']}\nTeléfono: ${residente['telefono_residente']}\nResidente desde: ${residente['fecha_inicio']}'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -71,7 +72,7 @@ class _ConstruirListaDeCartasResiState extends State<ConstruirListaDeCartasResi>
                                 Map<String, dynamic> eliminacion = {
                                   '_id': residente['_id']
                                 };
-                                await registro.eliminarRegistro(eliminacion,'visitantes/');
+                                await registro.eliminarRegistro(eliminacion,'residentes/');
                                 Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

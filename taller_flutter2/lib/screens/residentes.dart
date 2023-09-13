@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taller_flutter2/services/api_service.dart';
 import 'package:taller_flutter2/witgets/residentes/cartasResidentes.dart';
+import 'package:taller_flutter2/witgets/residentes/modalAgregarResi.dart';
 import 'package:taller_flutter2/witgets/visitantes/modalAgregar.dart';
 
 class InterfazResidentes extends StatefulWidget {
@@ -56,7 +57,7 @@ class _InterfazResidentesState extends State<InterfazResidentes> {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return ModalAgregar();
+              return ModalAgregarResi();
             },
           ).then((value) => setState(() {
                 futureData = _cargarDatos();

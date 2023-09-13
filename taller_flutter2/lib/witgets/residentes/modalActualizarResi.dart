@@ -72,8 +72,10 @@ class _ModalEditarResiState extends State<ModalEditarResi> {
             TextField(
               decoration: const InputDecoration(labelText: 'Apellido'),
               controller: apellido,
+              
             ),
             TextField(
+              enabled: false,
               decoration: const InputDecoration(labelText: 'Tipo de documento'),
               controller: tipoDocumento,
             ),

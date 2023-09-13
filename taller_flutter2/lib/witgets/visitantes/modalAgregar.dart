@@ -35,6 +35,16 @@ class _ModalAgregarState extends State<ModalAgregar> {
   String selectedPermiso = 'PERMITIDO';
 
   @override
+  void initState(){
+    super.initState();
+    _updateFields();
+
+  }
+  _updateFields(){
+    tipoDocumento.text = "CC";
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Agregar visitante'),
@@ -51,6 +61,7 @@ class _ModalAgregarState extends State<ModalAgregar> {
             ),
             TextField(
               decoration: const InputDecoration(labelText: 'Tipo de documento'),
+              enabled: false,
               controller: tipoDocumento,
             ),
             TextField(
@@ -75,7 +86,7 @@ class _ModalAgregarState extends State<ModalAgregar> {
               },
               decoration: const InputDecoration(
                 labelText: 'Género',
-                border: OutlineInputBorder(),
+                border: UnderlineInputBorder(),
               ),
             ),
             DropdownButtonFormField<String>(
@@ -95,7 +106,7 @@ class _ModalAgregarState extends State<ModalAgregar> {
               },
               decoration: const InputDecoration(
                 labelText: 'Permiso',
-                border: OutlineInputBorder(),
+                border: UnderlineInputBorder(),
               ),
             ),
 
@@ -135,14 +146,8 @@ class _ModalAgregarState extends State<ModalAgregar> {
               setState(() {
                 
               });
-              
-                
-              
-               // Cierra el modal después de que la solicitud POST se complete con éxito
             } catch (e) {
-              // Manejo de errores, muestra un mensaje de error si es necesario
               print('Error al agregar visitante: $e');
-              // Puedes mostrar un mensaje de error al usuario aquí si lo deseas
             }
           },
         ),

@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import '../../services/api_service.dart';
 
 class ModalAgregarResi extends StatefulWidget {
-  ModalAgregarResi({
-    super.key
-  });
+  ModalAgregarResi({super.key});
 
   @override
   State<ModalAgregarResi> createState() => _ModalAgregarResiState();
@@ -18,26 +16,35 @@ class _ModalAgregarResiState extends State<ModalAgregarResi> {
 
   final TextEditingController apellido = TextEditingController();
 
-  final TextEditingController tipoDocumento = TextEditingController();
+  TextEditingController tipoDocumento = TextEditingController();
 
   final TextEditingController numeroDocumento = TextEditingController();
 
   final TextEditingController sexo = TextEditingController();
 
-  final TextEditingController permiso = TextEditingController();
 
   final List<String> opcionesGenero = ['M', 'F'];
 
-  final List<String> opcionesPermiso = ['PERMITIDO', 'NO PERMITIDO'];
+  final TextEditingController correo = TextEditingController();
 
   String selectedGenero = 'M';
 
-  String selectedPermiso = 'PERMITIDO';
+  final TextEditingController telefono = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _updateFields();
+  }
+
+  _updateFields() {
+    tipoDocumento.text = "CC";
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Editar visitante'),
+      title: const Text('Agregar residente'),
       content: SingleChildScrollView(
         child: Column(
           children: [
@@ -50,6 +57,7 @@ class _ModalAgregarResiState extends State<ModalAgregarResi> {
               controller: apellido,
             ),
             TextField(
+              enabled: false,
               decoration: const InputDecoration(labelText: 'Tipo de documento'),
               controller: tipoDocumento,
             ),
@@ -78,27 +86,14 @@ class _ModalAgregarResiState extends State<ModalAgregarResi> {
                 border: OutlineInputBorder(),
               ),
             ),
-            DropdownButtonFormField<String>(
-              value: selectedPermiso,
-              items: opcionesPermiso.map((String permiso) {
-                return DropdownMenuItem<String>(
-                  value: permiso,
-                  child: Text(permiso),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    selectedPermiso = newValue;
-                  });
-                }
-              },
-              decoration: const InputDecoration(
-                labelText: 'Permiso',
-                border: OutlineInputBorder(),
-              ),
+            TextField( 
+              decoration: const InputDecoration(labelText: 'Correo'),
+              controller: correo,
             ),
-
+            TextField(
+              decoration: const InputDecoration(labelText: 'Teléfono'),
+              controller: telefono,
+            ),
           ],
         ),
       ),
@@ -112,41 +107,37 @@ class _ModalAgregarResiState extends State<ModalAgregarResi> {
         TextButton(
           child: const Text('Guardar'),
           onPressed: () async {
-            final Map<String, dynamic> nuevoVisitante = {
-              "tipo_documento_visitante": tipoDocumento.text,
-              "numero_documento_visitante": numeroDocumento.text,
-              "nombre_visitante": nombre.text,
-              "apellido_visitante": apellido.text,
-              "genero_visitante": selectedGenero,
-              "tipo_visitante": "ARRENDATARIO",
-              "anfitrion": "null",
-              "permiso": selectedPermiso,
-              // "fecha_nacimiento":,
-              // "correo":,
-              // "residencia":,
-              // "habita":,
-              // "estado":
-
+            final Map<String, dynamic> nuevoresidente = {
+              "tipo_documento_residente": tipoDocumento.text,
+              "numero_documento_residente": numeroDocumento.text,
+              "nombre_residente": nombre.text,
+              "apellido_residente": apellido.text,
+              "genero_residente": selectedGenero,
+              "tipo_residente": "ARRENDATARIO",
+              "correo": correo.text,
+              "telefono": telefono.text,
+              "residencia": null,
+              "habita":true,
+              "estado": 'ACTIVO',
+              "fecha_inicio": DateTime.now().toString(),
+              "fecha_nacimiento":"1993-10-10T00:00:00.000Z",
+              "fecha_fin": "2021-10-10T00:00:00.000Z",
             };
-            
+
             try {
-              await registro.agregarRegistro(nuevoVisitante,'visitantes/');
+              await registro.agregarRegistro(nuevoresidente, 'residentes/');
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Se agregó el registro correctamente'),
                 ),
               );
-              setState(() {
-                
-              });
-              
-                
-              
-               // Cierra el modal después de que la solicitud POST se complete con éxito
+              setState(() {});
+
+              // Cierra el modal después de que la solicitud POST se complete con éxito
             } catch (e) {
               // Manejo de errores, muestra un mensaje de error si es necesario
-              print('Error al agregar visitante: $e');
+              print('Error al agregar residente: $e');
               // Puedes mostrar un mensaje de error al usuario aquí si lo deseas
             }
           },
@@ -155,4 +146,3 @@ class _ModalAgregarResiState extends State<ModalAgregarResi> {
     );
   }
 }
-
