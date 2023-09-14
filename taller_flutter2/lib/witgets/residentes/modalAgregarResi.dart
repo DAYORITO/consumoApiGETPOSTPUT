@@ -108,20 +108,20 @@ class _ModalAgregarResiState extends State<ModalAgregarResi> {
           child: const Text('Guardar'),
           onPressed: () async {
             final Map<String, dynamic> nuevoresidente = {
-              "tipo_documento_residente": tipoDocumento.text,
+              "tipo_documento_residente": "CC",
               "numero_documento_residente": numeroDocumento.text,
               "nombre_residente": nombre.text,
               "apellido_residente": apellido.text,
               "genero_residente": selectedGenero,
               "tipo_residente": "ARRENDATARIO",
               "correo": correo.text,
-              "telefono": telefono.text,
-              "residencia": null,
+              "telefono_residente": telefono.text,
+              "residencia": "null",
               "habita":true,
-              "estado": 'ACTIVO',
-              "fecha_inicio": DateTime.now().toString(),
+              "estado": "ACTIVO",
+              "fecha_inicio": "2023-09-14",
               "fecha_nacimiento":"1993-10-10T00:00:00.000Z",
-              "fecha_fin": "2021-10-10T00:00:00.000Z",
+              "fecha_fin": "2021-10-10T00:00:00.000Z"
             };
 
             try {

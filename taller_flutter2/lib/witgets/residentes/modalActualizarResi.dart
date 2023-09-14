@@ -33,11 +33,11 @@ class _ModalEditarResiState extends State<ModalEditarResi> {
 
   final List<String> opcionesGenero = ['M', 'F'];
 
-  final List<String> opcionesPermiso = ['PERMITIDO', 'NO PERMITIDO'];
+  final TextEditingController correo = TextEditingController();
 
   String selectedGenero = 'M';
 
-  String selectedPermiso = 'PERMITIDO';
+  final TextEditingController telefono = TextEditingController();
 
 
   @override
@@ -51,10 +51,10 @@ class _ModalEditarResiState extends State<ModalEditarResi> {
     nombre.text = widget.residente['nombre_residente'];
     apellido.text = widget.residente['apellido_residente'];
     selectedGenero = widget.residente['genero_residente'];
-    selectedPermiso = widget.residente['permiso'];
     tipoDocumento.text = widget.residente['tipo_documento_residente'];
     numeroDocumento.text = widget.residente['numero_documento_residente'];
-
+    correo.text = widget.residente['correo'];
+    telefono.text = widget.residente['telefono_residente'];
   }
 
   @override
@@ -68,11 +68,12 @@ class _ModalEditarResiState extends State<ModalEditarResi> {
             TextField(
               decoration: const InputDecoration(labelText: 'Nombre'),
               controller: nombre,
+              enabled: false,
             ),
             TextField(
               decoration: const InputDecoration(labelText: 'Apellido'),
               controller: apellido,
-              
+              enabled: false,
             ),
             TextField(
               enabled: false,
@@ -83,6 +84,7 @@ class _ModalEditarResiState extends State<ModalEditarResi> {
               decoration:
                   const InputDecoration(labelText: 'Número de documento'),
               controller: numeroDocumento,
+              enabled: false,
             ),
             DropdownButtonFormField<String>(
               value: selectedGenero,
@@ -104,27 +106,14 @@ class _ModalEditarResiState extends State<ModalEditarResi> {
                 border: OutlineInputBorder(),
               ),
             ),
-            DropdownButtonFormField<String>(
-              value: selectedPermiso,
-              items: opcionesPermiso.map((String permiso) {
-                return DropdownMenuItem<String>(
-                  value: permiso,
-                  child: Text(permiso),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    selectedPermiso = newValue;
-                  });
-                }
-              },
-              decoration: const InputDecoration(
-                labelText: 'Permiso',
-                border: OutlineInputBorder(),
-              ),
+            TextField( 
+              decoration: const InputDecoration(labelText: 'Correo'),
+              controller: correo,
             ),
-
+            TextField(
+              decoration: const InputDecoration(labelText: 'Teléfono'),
+              controller: telefono,
+            ),
           ],
         ),
       ),
@@ -138,19 +127,26 @@ class _ModalEditarResiState extends State<ModalEditarResi> {
         TextButton(
           child: const Text('Guardar'),
           onPressed: () async {
-            final Map<String, dynamic> nuevoresidente = {
+            final Map<String, dynamic> actualizacionresidente = {
               "_id": widget.residente['_id'],
-              "tipo_documento_residente": tipoDocumento.text,
-              "numero_documento_residente": numeroDocumento.text,
-              "nombre_residente": nombre.text,
-              "apellido_residente": apellido.text,
-              "genero_residente": selectedGenero,
-              "permiso": selectedPermiso,
-
+              // "tipo_documento_residente": widget.residente['tipo_documento_residente'],
+              // "numero_documento_residente": numeroDocumento.text,
+              // "nombre_residente": nombre.text,
+              // "apellido_residente": apellido.text,
+              // "genero_residente": selectedGenero,
+              // "tipo_residente": widget.residente['tipo_residente'],
+              "correo": correo.text,
+              "telefono_residente": telefono.text,
+              // "residencia": "null",
+              // "habita":true,
+              // "estado": widget.residente['estado'],
+              // "fecha_inicio": widget.residente['fecha_inicio'],
+              // "fecha_nacimiento": widget.residente['fecha_nacimiento'],
+              // "fecha_fin": widget
             };
             
             try {
-              await registro.actualizarRegistro(nuevoresidente,'residentes/');
+              await registro.actualizarRegistro(actualizacionresidente,'residentes/');
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
