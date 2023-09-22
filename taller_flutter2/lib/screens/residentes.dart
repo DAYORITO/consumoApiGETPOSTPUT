@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taller_flutter2/services/api_service.dart';
 import 'package:taller_flutter2/witgets/residentes/cartasResidentes.dart';
 import 'package:taller_flutter2/witgets/residentes/modalAgregarResi.dart';
-import 'package:taller_flutter2/witgets/visitantes/modalAgregar.dart';
+
 
 class InterfazResidentes extends StatefulWidget {
   const InterfazResidentes({super.key});

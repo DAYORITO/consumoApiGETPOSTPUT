@@ -1,8 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Permiso de Internet para red -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Permiso de ubicación del dispositivo -->
+    
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <!-- Permiso de GPS -->
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <!-- Permiso de cámara -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
     <application
         android:label="taller_flutter2"
         android:name="${applicationName}"
         android:icon="@mipmap/launche_icon">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyDLGfLRqyuwcQdJkzMJzVBC4Wf1IqIEgn4"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
